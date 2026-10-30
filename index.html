@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standard Item Registration</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; background-color: #f8f9fa; }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .header { text-align: center; margin-bottom: 20px; }
+    .header img { width: 120px; height: auto; margin-bottom: 10px; border-radius: 50%; }
+    h1 { color: #007bff; font-size: 1.8em; margin-bottom: 5px; }
+    h2 { color: #6c757d; font-size: 1.1em; font-weight: normal; margin-top: 0; }
+    h3 { margin-top: 25px; color: #343a40; border-bottom: 2px solid #007bff; padding-bottom: 5px; font-size: 1.2em; }
+    label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: bold; }
+    input[type="text"], input[type="number"], select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .search-box-group { display: flex; align-items: center; }
+    .search-box-group input { flex-grow: 1; margin-bottom: 0; border-right: none; border-radius: 4px 0 0 4px; }
+    .search-btn { background-color: #007bff; color: white; width: 45px; height: 41px; border: 1px solid #007bff; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 1.1em; margin-top: 0; }
+    .search-btn:hover { background-color: #0056b3; }
+
+    .item-card { background: #fdfdfd; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; }
+    .item-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 8px; font-weight: bold; }
+    .item-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 0.85em; }
+    .item-grid div { background: #f8fafc; padding: 6px; border-radius: 4px; }
+    .item-grid label { font-size: 0.8em; color: #64748b; margin-top: 0; }
+    
+    .btn-add { background-color: #17a2b8; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    .btn-add:hover { background-color: #138496; }
+    .btn-remove { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    .btn-remove:hover { background-color: #c82333; }
+    
+    .action-btns { display: flex; gap: 15px; margin-top: 25px; }
+    .btn-submit { background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; width: 70%; }
+    .btn-submit:hover { background-color: #218838; }
+    .btn-cancel { background-color: #6c757d; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; width: 30%; }
+    .btn-cancel:hover { background-color: #5a6268; }
+
+    #message-area { margin-top: 20px; padding: 12px; border-radius: 4px; text-align: center; display: none; font-weight: bold; }
+    .success { background-color: #e6ffed; color: #28a745; border: 1px solid #28a745; }
+    .error { background-color: #ffe6e6; color: red; border: 1px solid red; }
+
+    .footer { margin-top: 40px; padding-top: 15px; border-top: 1px solid #ced4da; font-size: 0.8em; color: #6c757d; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <img src="https://lh3.googleusercontent.com/d/1tCDAMimy_b0x9kRmWNyYMn4voR9Ynr0J" alt="Logo">
+    <h1>Standard Item Registration</h1>
+    <h2>Haemodialysis Unit, Sarawak General Hospital</h2>
+  </div>
+
+  <form id="stockInForm">
+    
+    <div class="grid-2">
+      <div>
+        <label for="staffName">Name of Staff</label>
+        <input type="text" id="staffName" name="staffName" required placeholder="Enter full name">
+      </div>
+      <div>
+        <label for="designation">Designation</label>
+        <select id="designation" name="designation" required>
+          <option value="" disabled selected>Select Designation</option>
+          <option value="Penolong Pegawai Perubatan">Penolong Pegawai Perubatan</option>
+          <option value="Jururawat">Jururawat</option>
+          <option value="Pembantu Perawatan Kesihatan">Pembantu Perawatan Kesihatan</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <label for="regMonth">Month</label>
+        <select id="regMonth" name="regMonth" required></select>
+      </div>
+      <div>
+        <label for="regYear">Year</label>
+        <select id="regYear" name="regYear" required></select>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <label for="receivedFromSelect">Received From</label>
+        <select id="receivedFromSelect" onchange="handleReceivedFromChange(this.value)" required>
+          <option value="" disabled selected>Select Source</option>
+          <option value="Pharmacy Department">Pharmacy Department</option>
+          <option value="Others">Others (please specify)</option>
+        </select>
+        <input type="text" id="receivedFromOtherText" placeholder="Please specify source" style="display: none; margin-top: 5px;">
+      </div>
+      <div>
+        <div id="sivContainer" style="display: none;">
+          <label for="sivNo">SIV No.</label>
+          <input type="text" id="sivNo" placeholder="Enter SIV Number">
+        </div>
+      </div>
+    </div>
+
+    <h3>Catalogue Search</h3>
+
+    <div class="grid-2">
+      <div>
+        <label for="itemDropdown">Select Item Name</label>
+        <select id="itemDropdown" onchange="onDropdownSelect(this.value)">
+          <option value="" selected>-- Loading Catalogue... --</option>
+        </select>
+      </div>
+      <div>
+        <label for="searchKeyword">Search Item by Name</label>
+        <div class="search-box-group">
+          <input type="text" id="searchKeyword" placeholder="Key in item name...">
+          <button type="button" class="search-btn" onclick="searchCatalogue()" title="Search Catalogue">🔍</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="searchResultsSection" style="display: none;">
+      <h3>Search Results</h3>
+      <div id="searchResultsContainer"></div>
+    </div>
+
+    <h3>List of Selected Items (Max 200)</h3>
+    <div id="selectedItemsContainer">
+      <p style="color: #6c757d; font-style: italic;" id="emptyListMsg">No items added yet. Search and add items from the catalogue above.</p>
+    </div>
+
+    <div class="action-btns">
+      <button type="submit" class="btn-submit" id="submitBtn">Submit Stock In</button>
+      <button type="button" class="btn-cancel" onclick="resetForm()">Cancel</button>
+    </div>
+
+    <div id="message-area"></div>
+  </form>
+
+  <div class="footer">
+    &copy; Designed and developed by PPP Zulfadlie bin Janie<br>
+    for Haemodialysis Unit, Sarawak General Hospital
+  </div>
+</div>
+
+<script>
+  // YOUR DEPLOYED GOOGLE APPS SCRIPT API URL
+  const SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbyGAnVBVbeD4J4II1gsyDPdv-mOYJFLmKsj5nwg1rBz9uZCN6y7uQyttP9GTQBGmkDj-g/exec";
+
+  let fullCatalogue = [];
+  let selectedItems = [];
+
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  window.onload = function() {
+    populateDates();
+    loadCatalogue();
+  };
+
+  function populateDates() {
+    const monthSelect = document.getElementById('regMonth');
+    const yearSelect = document.getElementById('regYear');
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+
+    MONTHS.forEach((m, idx) => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m;
+      if (idx === currentMonth) opt.selected = true;
+      monthSelect.appendChild(opt);
+    });
+
+    for (let y = 2026; y <= 2030; y++) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      if (y === currentYear) opt.selected = true;
+      yearSelect.appendChild(opt);
+    }
+  }
+
+  function handleReceivedFromChange(val) {
+    const otherText = document.getElementById('receivedFromOtherText');
+    const sivContainer = document.getElementById('sivContainer');
+    const sivInput = document.getElementById('sivNo');
+
+    if (val === 'Others') {
+      otherText.style.display = 'block';
+      otherText.required = true;
+    } else {
+      otherText.style.display = 'none';
+      otherText.required = false;
+      otherText.value = '';
+    }
+
+    if (val === 'Pharmacy Department') {
+      sivContainer.style.display = 'block';
+      sivInput.required = true;
+    } else {
+      sivContainer.style.display = 'none';
+      sivInput.required = false;
+      sivInput.value = '';
+    }
+  }
+
+  function loadCatalogue() {
+    fetch(`${SCRIPT_API_URL}?action=getCatalogue`)
+      .then(response => response.json())
+      .then(res => {
+        if (res.success) {
+          fullCatalogue = res.data;
+          const dropdown = document.getElementById('itemDropdown');
+          dropdown.innerHTML = '<option value="" disabled selected>-- Select an Item from Catalogue --</option>';
+          fullCatalogue.forEach((item, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = item.namaItem;
+            dropdown.appendChild(opt);
+          });
+        } else {
+          showMessage("Failed to load catalogue: " + res.error, "error");
+        }
+      })
+      .catch(err => {
+        showMessage("Network/API error loading catalogue: " + err, "error");
+      });
+  }
+
+  function onDropdownSelect(indexStr) {
+    if (indexStr === "") return;
+    const index = parseInt(indexStr);
+    displaySearchResults([fullCatalogue[index]]);
+  }
+
+  function searchCatalogue() {
+    const keyword = document.getElementById('searchKeyword').value.trim().toLowerCase();
+    if (!keyword) {
+      showMessage("Please enter a keyword to search.", "error");
+      return;
+    }
+    const results = fullCatalogue.filter(item => item.namaItem.toLowerCase().includes(keyword));
+    displaySearchResults(results);
+  }
+
+  function displaySearchResults(results) {
+    const section = document.getElementById('searchResultsSection');
+    const container = document.getElementById('searchResultsContainer');
+    container.innerHTML = "";
+
+    if (results.length === 0) {
+      container.innerHTML = "<p style='color:red;'>No matching items found in catalogue.</p>";
+    } else {
+      results.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "item-card";
+        card.innerHTML = `
+          <div class="item-card-header">
+            <span>${item.namaItem}</span>
+            <button type="button" class="btn-add" onclick='addItemToList(${JSON.stringify(item).replace(/'/g, "&apos;")})'>+ Add to List</button>
+          </div>
+          <div class="item-grid">
+            <div><label>Item Kod Baru:</label><br><b>${item.kodBaru || '-'}</b></div>
+            <div><label>Deskripsi Pembungkusan:</label><br>${item.deskripsiPembungkusan || '-'}</div>
+            <div><label>SKU Pembekalan:</label><br>${item.skuPembekalan || '-'}</div>
+            <div><label>Harga (RM):</label><br>${item.harga || '0.00'}</div>
+            <div><label>Catatan:</label><br>${item.catatan || '-'}</div>
+            <div><label>Lokasi:</label><br>${item.lokasi || '-'}</div>
+            <div><label>Item Purchasing Type:</label><br>${item.purchasingType || '-'}</div>
+            <div><label>Item Kod Lama:</label><br>${item.kodLama || '-'}</div>
+            <div><label>SKU:</label><br>${item.sku || '-'}</div>
+            <div><label>Unit Price per SKU (RM):</label><br>${item.unitPriceSKU || '0.00'}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+    section.style.display = "block";
+  }
+
+  function addItemToList(item) {
+    if (selectedItems.length >= 200) {
+      alert("Maximum limit of 200 items reached for single submission.");
+      return;
+    }
+
+    selectedItems.push({
+      namaItem: item.namaItem,
+      kodBaru: item.kodBaru,
+      deskripsiPembungkusan: item.deskripsiPembungkusan,
+      skuPembekalan: item.skuPembekalan,
+      harga: item.harga,
+      totalIn: ""
+    });
+
+    renderSelectedItems();
+
+    document.getElementById('searchResultsSection').style.display = 'none';
+    document.getElementById('searchKeyword').value = '';
+    document.getElementById('itemDropdown').selectedIndex = 0;
+  }
+
+  function renderSelectedItems() {
+    const container = document.getElementById('selectedItemsContainer');
+    container.innerHTML = "";
+
+    if (selectedItems.length === 0) {
+      container.innerHTML = '<p style="color: #6c757d; font-style: italic;" id="emptyListMsg">No items added yet. Search and add items from the catalogue above.</p>';
+      return;
+    }
+
+    selectedItems.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = "item-card";
+      card.innerHTML = `
+        <div class="item-card-header">
+          <span>Item #${index + 1}: ${item.namaItem}</span>
+          <button type="button" class="btn-remove" onclick="removeItemFromList(${index})">Remove</button>
+        </div>
+        <div class="grid-2">
+          <div><label>Nama Item:</label><br><b>${item.namaItem}</b></div>
+          <div><label>Item Kod Baru:</label><br><b>${item.kodBaru || '-'}</b></div>
+        </div>
+        <div style="margin-top: 10px;" class="grid-2">
+          <div>
+            <label>Deskripsi Pembungkusan</label>
+            <input type="text" value="${item.deskripsiPembungkusan}" onchange="updateSelectedItem(${index}, 'deskripsiPembungkusan', this.value)" required>
+          </div>
+          <div>
+            <label>SKU Pembekalan</label>
+            <input type="text" value="${item.skuPembekalan}" onchange="updateSelectedItem(${index}, 'skuPembekalan', this.value)" required>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label>Harga (RM)</label>
+            <input type="number" step="0.01" min="0" value="${item.harga}" onchange="updateSelectedItem(${index}, 'harga', this.value)" required>
+          </div>
+          <div>
+            <label>Total In (Quantity)</label>
+            <input type="number" min="1" step="1" value="${item.totalIn}" placeholder="Enter quantity" oninput="this.value = this.value.replace(/[^0-9]/g, '')" onchange="updateSelectedItem(${index}, 'totalIn', this.value)" required>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function updateSelectedItem(index, field, value) {
+    selectedItems[index][field] = value;
+  }
+
+  function removeItemFromList(index) {
+    selectedItems.splice(index, 1);
+    renderSelectedItems();
+  }
+
+  document.getElementById('stockInForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (selectedItems.length === 0) {
+      showMessage("Please add at least ONE item to the selected list before submitting.", "error");
+      return;
+    }
+
+    for (let i = 0; i < selectedItems.length; i++) {
+      const item = selectedItems[i];
+      const totalInQty = parseInt(item.totalIn, 10);
+  
+      if (!item.deskripsiPembungkusan || !item.skuPembekalan || item.harga === "" || !totalInQty || totalInQty <= 0) {
+        showMessage(`Please complete all required fields and enter a valid quantity for Item #${i + 1} (${item.namaItem}).`, "error");
+        return;
+      }
+    }
+
+    const receivedFromVal = document.getElementById('receivedFromSelect').value;
+    const finalReceivedFrom = receivedFromVal === 'Others' ? document.getElementById('receivedFromOtherText').value.trim() : receivedFromVal;
+    const sivNoVal = receivedFromVal === 'Pharmacy Department' ? document.getElementById('sivNo').value.trim() : '-';
+
+    const payload = {
+      staffName: document.getElementById('staffName').value.trim(),
+      designation: document.getElementById('designation').value,
+      regMonth: document.getElementById('regMonth').value,
+      regYear: document.getElementById('regYear').value,
+      receivedFrom: finalReceivedFrom,
+      sivNo: sivNoVal,
+      items: selectedItems
+    };
+
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').textContent = "Submitting Data...";
+
+    fetch(SCRIPT_API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "saveStockIn",
+        payload: payload
+      })
+    })
+    .then(response => response.json())
+    .then(res => {
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = "Submit Stock In";
+      if (res.success) {
+        alert("Data submitted successfully!");
+        resetForm();
+      } else {
+        showMessage("Error submitting data: " + res.error, "error");
+      }
+    })
+    .catch(err => {
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = "Submit Stock In";
+      showMessage("Server/Network error: " + err, "error");
+    });
+  });
+
+  function resetForm() {
+    document.getElementById('stockInForm').reset();
+    selectedItems = [];
+    renderSelectedItems();
+    handleReceivedFromChange('');
+    document.getElementById('searchResultsSection').style.display = "none";
+    document.getElementById('message-area').style.display = "none";
+    populateDates();
+  }
+
+  function showMessage(msg, type) {
+    const area = document.getElementById('message-area');
+    area.textContent = msg;
+    area.className = type;
+    area.style.display = "block";
+  }
+</script>
+</body>
+</html>
